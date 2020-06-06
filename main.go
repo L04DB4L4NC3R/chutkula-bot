@@ -88,5 +88,6 @@ func main() {
 	})
 
 	// sendJokes(c, os.Getenv("GROUP_ID")
+	log.Println("Starting bot....")
 	log.Fatal(bot.Start())
 }
