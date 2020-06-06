@@ -77,6 +77,11 @@ func sendJokes(c *tbot.Client, chatID string) {
 		}
 	}
 }
+
+func handler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Hi there, I love %s!", r.URL.Path[1:])
+}
+
 func main() {
 	if err := godotenv.Load(); err != nil {
 		log.Fatal("Error loading .env file")
@@ -90,7 +95,9 @@ func main() {
 	})
 
 	// sendJokes(c, os.Getenv("GROUP_ID")
-	log.Println("Starting bot....")
-	go log.Fatal(bot.Start())
-	http.ListenAndServe(os.Getenv("PORT"), nil)
+	go bot.Start()
+	log.Println("Started Bot")
+
+	http.HandleFunc("/", handler)
+	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), nil))
 }
