@@ -9,6 +9,8 @@ import (
 	"strings"
 	"time"
 
+	"net/http"
+
 	strip "github.com/grokify/html-strip-tags-go"
 	"github.com/joho/godotenv"
 	"github.com/mmcdole/gofeed"
@@ -89,5 +91,6 @@ func main() {
 
 	// sendJokes(c, os.Getenv("GROUP_ID")
 	log.Println("Starting bot....")
-	log.Fatal(bot.Start())
+	go log.Fatal(bot.Start())
+	http.ListenAndServe(os.Getenv("PORT"), nil)
 }
