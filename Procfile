@@ -1,1 +1,1 @@
-web: ./bin/jokes-rss-bot
+worker: ./bin/jokes-rss-bot
