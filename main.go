@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	"net/http"
 	"os"
 	"time"
 
@@ -29,10 +28,5 @@ func main() {
 	transit.HandleBot(bot, jokesMessenger, jokesFeed)
 
 	log.Println("Starting Bot")
-	go bot.Start()
-
-	// due to heroku build process not being
-	// able to startup worker properly
-	// this is needed
-	http.ListenAndServe(":"+os.Getenv("PORT"), nil)
+	bot.Start()
 }

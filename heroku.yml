@@ -4,4 +4,4 @@ build:
 release:
   image: worker
 run:
-  worker: /root/app
+  worker: ./app
