@@ -3,9 +3,11 @@ package feed
 import (
 	"context"
 	"fmt"
+	"math/rand"
 	"strings"
 	"time"
 
+	"github.com/L04DB4L4NC3R/jokes-rss-bot/src/static"
 	log "github.com/sirupsen/logrus"
 
 	strip "github.com/grokify/html-strip-tags-go"
@@ -31,11 +33,14 @@ func NewJokesFeed(url, botname string, fetchTimeout time.Duration) Feeder {
 }
 
 func (j *JokesFeed) ParseContent(content string, title string) (parsedItem string) {
+
+	// replace useless text from the subreddit
 	replacer := strings.NewReplacer("&quot", "", "&#32", "", ";", "", "[link]", "", "[comments", "", "submitted by", "\n\nsubmitted by: ", "]", "", "&#39", "")
 	content = replacer.Replace(strip.StripTags(content))
 
-	// TODO: use random emoji
-	return fmt.Sprintf("👽🤣😋😏 \n\n%s\n\n%s\n\n😂😳😛😵\n\nby @%s", title, content, j.BotName)
+	// inject random emoji
+	emj := j.EmojiInjector(8)
+	return fmt.Sprintf("%s %s %s %s\n\n%s\n\n%s\n\n%s %s %s %s\n\nby @%s", emj[0], emj[1], emj[2], emj[3], title, content, emj[4], emj[5], emj[6], emj[7], j.BotName)
 }
 
 func (j *JokesFeed) FetchFeed() (items []string, err error) {
@@ -65,7 +70,7 @@ func (j *JokesFeed) FetchFeed() (items []string, err error) {
 		content = j.ParseContent(i.Content, i.Title)
 		reply = append(reply, content)
 	}
-	log.Infof("Succeeded fetching feed.\nItems: %d\nUpdated: %s\nUp to date count: %d\nNew feed count: %d", len(feed.Items), feed.Updated, uptodatecount, len(reply))
+	log.Infof("Succeeded fetching feed. Items: %d. Updated: %s. Up to date count: %d. New feed count: %d", len(feed.Items), feed.Updated, uptodatecount, len(reply))
 	j.LastUpdatedAt = feed.UpdatedParsed
 	return reply, nil
 }
@@ -77,6 +82,11 @@ func (j *JokesFeed) IsSyncedTime(updatedTime *time.Time) bool {
 	return false
 }
 
-func (j *JokesFeed) EmojiInjector() (emojis []string) {
-	panic("not implemented") // TODO: Implement
+func (j *JokesFeed) EmojiInjector(num int) (emojis []string) {
+	var index int
+	for i := 0; i < num; i++ {
+		index = rand.Intn(len(static.EmojiList))
+		emojis = append(emojis, static.EmojiList[index])
+	}
+	return emojis
 }

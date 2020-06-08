@@ -9,5 +9,5 @@ type Feeder interface {
 
 	IsSyncedTime(updatedTime *time.Time) bool
 
-	EmojiInjector() (emojis []string)
+	EmojiInjector(num int) (emojis []string)
 }
