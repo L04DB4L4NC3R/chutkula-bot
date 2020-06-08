@@ -19,7 +19,7 @@ func main() {
 
 	greeting := "Hey, There!"
 	apology := "Sorry, Could not be completed!"
-	botname := "ChutkulaBot"
+	botname := "chutkulabot"
 
 	jokesMessenger := transit.NewJokesMessenger(greeting, apology, botname, os.Getenv("TELEGRAM_GROUPID"), bot.Client())
 

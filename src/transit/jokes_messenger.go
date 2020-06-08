@@ -49,10 +49,9 @@ func (j *JokesMessenger) SendGroup(message string) error {
 	return err
 }
 
-func (j *JokesMessenger) SyncTime(newFetchedAt *time.Time) error {
-	panic("not implemented") // TODO: Implement
-}
+func (j *JokesMessenger) CaughtUp(chatID string) error {
+	_, err := j.TelegramClient.SendMessage(chatID, "You are all caught up!")
 
-func (j *JokesMessenger) GetLastSyncTime() (*time.Time, error) {
-	panic("not implemented") // TODO: Implement
+	return err
+
 }
