@@ -1,5 +1,7 @@
 build:
   docker:
     worker: Dockerfile
+release:
+  image: worker
 run:
-  worker: ./app
+  worker: /root/app
