@@ -15,8 +15,9 @@ A telegram bot to send jokes daily and on demand [@chutkulabot](https://t.me/chu
 
 ---
 
-<img src="https://user-images.githubusercontent.com/30529572/84049320-cfd3a300-a99b-11ea-905a-6da539e6a0f7.jpg" width=20% />
-
+<p align="center">
+<img src="https://user-images.githubusercontent.com/30529572/84049320-cfd3a300-a99b-11ea-905a-6da539e6a0f7.jpg" width=30% align="center" />
+</p>
 ---
 
 ### Instructions to run
