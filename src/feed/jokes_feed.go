@@ -40,7 +40,7 @@ func (j *JokesFeed) ParseContent(content string, title string) (parsedItem strin
 
 	// inject random emoji
 	emj := j.EmojiInjector(8)
-	return fmt.Sprintf("%s %s %s %s\n\n%s\n\n%s\n\n%s %s %s %s\n\nby @%s", emj[0], emj[1], emj[2], emj[3], title, content, emj[4], emj[5], emj[6], emj[7], j.BotName)
+	return fmt.Sprintf("%s %s %s %s\n\n%s\n\n%s\n\n%s %s %s %s\n\nby %s", emj[0], emj[1], emj[2], emj[3], title, content, emj[4], emj[5], emj[6], emj[7], j.BotName)
 }
 
 func (j *JokesFeed) FetchFeed() (items []string, err error) {
