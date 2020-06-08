@@ -11,7 +11,7 @@ import (
 
 func Daily(chatID string, messenger transit.Messenger, feed feed.Feeder) *cron.Cron {
 	c := cron.New()
-	c.AddFunc("@daily", func() {
+	c.AddFunc("@every 4h0m0s", func() {
 
 		log.Infof("Running Daily CronJob")
 		jokes, err := feed.FetchFeed()
