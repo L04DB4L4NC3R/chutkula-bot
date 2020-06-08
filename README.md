@@ -10,11 +10,18 @@ A telegram bot to send jokes daily and on demand [@chutkulabot](https://t.me/chu
 - [x] Time sync, so you always get the most latest feed
 - [x] Daily cron, plug in a telegram group ID and get feed daily
 - [x] Random emoji injector
+- [ ] Configuring Group ID using telegram
 - [ ] Configurable CRON
 
 ---
 
+<img src="https://user-images.githubusercontent.com/30529572/84049320-cfd3a300-a99b-11ea-905a-6da539e6a0f7.jpg" width=20% />
+
+---
+
 ### Instructions to run
+
+* Set up `.env` using the [.env.example](./.env.example) provided in this repo.
 
 * Run natively:
 
@@ -40,6 +47,12 @@ podman image build -t chutkulabot .
 podman container run --name chutkula -d chutkulabot
 ```
 
+---
+
+* Bot Usage
+
+By default, the bot sends a daily updated feed on the GroupID configured in the `.env` file. But you can get the updated list on demand also. Simply send `/joke` or `/jokes` to the bot.
+
 <p align="center">
-Made with :heart: by [Angad Sharma](https://github.com/L04DB4L4NC3R)
+Made with :heart: by Angad Sharma
 </p>
