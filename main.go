@@ -1,32 +1,45 @@
 package main
 
 import (
-	"log"
 	"os"
 	"time"
 
 	"github.com/L04DB4L4NC3R/jokes-rss-bot/src/feed"
 	"github.com/L04DB4L4NC3R/jokes-rss-bot/src/transit"
 	"github.com/joho/godotenv"
+	log "github.com/sirupsen/logrus"
 )
 
-func main() {
+func initialize() {
+
+	log.SetFormatter(&log.JSONFormatter{})
+	log.SetOutput(os.Stdout)
+
 	if err := godotenv.Load(); err != nil {
-		log.Println("Error loading .env file")
+		log.Warnf("Error loading .env file: %t", err)
 	}
 
+}
+
+func main() {
+
+	// initialize logger and environment variables
+	initialize()
+
+	// create telegram bot
 	bot := transit.NewTelegramServer()
 
-	greeting := "Hey, There!"
-	apology := "Sorry, Could not be completed!"
-	botname := "chutkulabot"
+	// create transit layer
+	jokesMessenger := transit.NewJokesMessenger(os.Getenv("GREETING"), os.Getenv("APOLOGY"),
+		os.Getenv("BOTNAME"), os.Getenv("GROUPID"), bot.Client())
 
-	jokesMessenger := transit.NewJokesMessenger(greeting, apology, botname, os.Getenv("TELEGRAM_GROUPID"), bot.Client())
+	// create functional layer
+	jokesFeed := feed.NewJokesFeed(os.Getenv("RSS"), os.Getenv("BOTNAME"), time.Second*60)
 
-	jokesFeed := feed.NewJokesFeed(os.Getenv("JOKES_RSS"), botname, time.Second*60)
-
+	// handle transit
 	transit.HandleBot(bot, jokesMessenger, jokesFeed)
 
-	log.Println("Starting Bot")
+	// start the worker
+	log.Infoln("Starting Bot")
 	bot.Start()
 }

@@ -6,6 +6,8 @@ import (
 	"strings"
 	"time"
 
+	log "github.com/sirupsen/logrus"
+
 	strip "github.com/grokify/html-strip-tags-go"
 	"github.com/mmcdole/gofeed"
 )
@@ -46,6 +48,7 @@ func (j *JokesFeed) FetchFeed() (items []string, err error) {
 	feed, err := fp.ParseURLWithContext(j.Url, ctx)
 
 	if err != nil {
+		log.Errorf("Error fetching feed: %t", err)
 		return nil, err
 	}
 
@@ -53,13 +56,16 @@ func (j *JokesFeed) FetchFeed() (items []string, err error) {
 	// else return both nil
 	var reply []string
 	var content string
+	var uptodatecount = 0
 	for _, i := range feed.Items {
 		if !j.IsSyncedTime(i.UpdatedParsed) {
+			uptodatecount++
 			continue
 		}
 		content = j.ParseContent(i.Content, i.Title)
 		reply = append(reply, content)
 	}
+	log.Infof("Succeeded fetching feed.\nItems: %d\nUpdated: %s\nUp to date count: %d\nNew feed count: %d", len(feed.Items), feed.Updated, uptodatecount, len(reply))
 	j.LastUpdatedAt = feed.UpdatedParsed
 	return reply, nil
 }
