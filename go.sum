@@ -31,3 +31,5 @@ golang.org/x/sys v0.0.0-20190422165155-953cdadca894 h1:Cz4ceDQGXuKRnVBDTS23GTn/p
 golang.org/x/sys v0.0.0-20190422165155-953cdadca894/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/text v0.3.0 h1:g61tztE5qeGQ89tm6NTjjM9VPIm088od1l6aSorWRWg=
 golang.org/x/text v0.3.0/go.mod h1:NqM8EUOU14njkJ3fqMW+pc6Ldnwhi/IjpwHt7yyuwOQ=
+gopkg.in/robfig/cron.v2 v2.0.0-20150107220207-be2e0b0deed5 h1:E846t8CnR+lv5nE+VuiKTDG/v1U2stad0QzddfJC7kY=
+gopkg.in/robfig/cron.v2 v2.0.0-20150107220207-be2e0b0deed5/go.mod h1:hiOFpYm0ZJbusNj2ywpbrXowU3G8U6GIQzqn2mw1UIE=

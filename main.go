@@ -4,6 +4,7 @@ import (
 	"os"
 	"time"
 
+	cronjob "github.com/L04DB4L4NC3R/jokes-rss-bot/src/crons"
 	"github.com/L04DB4L4NC3R/jokes-rss-bot/src/feed"
 	"github.com/L04DB4L4NC3R/jokes-rss-bot/src/transit"
 	"github.com/joho/godotenv"
@@ -31,7 +32,7 @@ func main() {
 
 	// create transit layer
 	jokesMessenger := transit.NewJokesMessenger(os.Getenv("GREETING"), os.Getenv("APOLOGY"),
-		os.Getenv("BOTNAME"), os.Getenv("GROUPID"), bot.Client())
+		os.Getenv("BOTNAME"), os.Getenv("GROUP_ID"), bot.Client())
 
 	// create functional layer
 	jokesFeed := feed.NewJokesFeed(os.Getenv("RSS"), os.Getenv("BOTNAME"), time.Second*60)
@@ -39,7 +40,14 @@ func main() {
 	// handle transit
 	transit.HandleBot(bot, jokesMessenger, jokesFeed)
 
+	// start CRON Jobs
+	dailcron := cronjob.Daily(os.Getenv("GROUP_ID"), jokesMessenger, jokesFeed)
+	dailcron.Start()
+
 	// start the worker
 	log.Infoln("Starting Bot")
-	bot.Start()
+	if err := bot.Start(); err != nil {
+		dailcron.Stop()
+		log.Fatalf("Error in starting bot: %t", err)
+	}
 }
