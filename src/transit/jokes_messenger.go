@@ -25,7 +25,7 @@ func NewJokesMessenger(greeting, apology, name, groupID string, tbc *tbot.Client
 	}
 }
 
-func (j *JokesMessenger) Send(message string, chatID string) error {
+func (j *JokesMessenger) Send(chatID string, message string) error {
 	_, err := j.TelegramClient.SendMessage(chatID, message)
 
 	return err

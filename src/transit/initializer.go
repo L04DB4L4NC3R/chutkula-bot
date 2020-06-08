@@ -1,6 +1,7 @@
 package transit
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/L04DB4L4NC3R/jokes-rss-bot/src/feed"
@@ -20,7 +21,10 @@ func HandleBot(bot *tbot.Server, jokesMessenger Messenger, jokesFeed feed.Feeder
 			return
 		}
 		for _, joke := range jokes {
-			jokesMessenger.Send(m.Chat.ID, joke)
+			err := jokesMessenger.Send(m.Chat.ID, joke)
+			if err != nil {
+				fmt.Println(err)
+			}
 		}
 	})
 }
