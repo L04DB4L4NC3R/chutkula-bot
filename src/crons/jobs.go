@@ -9,7 +9,7 @@ import (
 	"gopkg.in/robfig/cron.v2"
 )
 
-func Daily(chatID string, messenger transit.Messenger, feed feed.Feeder) *cron.Cron {
+func FeedUpdate(chatID string, messenger transit.Messenger, feed feed.Feeder) *cron.Cron {
 	c := cron.New()
 	c.AddFunc("@every 4h0m0s", func() {
 

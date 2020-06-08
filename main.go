@@ -41,7 +41,7 @@ func main() {
 	transit.HandleBot(bot, jokesMessenger, jokesFeed)
 
 	// start CRON Jobs
-	dailcron := cronjob.Daily(os.Getenv("GROUP_ID"), jokesMessenger, jokesFeed)
+	dailcron := cronjob.FeedUpdate(os.Getenv("GROUP_ID"), jokesMessenger, jokesFeed)
 	dailcron.Start()
 
 	// start the worker
