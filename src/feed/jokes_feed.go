@@ -43,6 +43,33 @@ func (j *JokesFeed) ParseContent(content string, title string) (parsedItem strin
 	return fmt.Sprintf("%s %s %s %s\n\n%s\n\n%s\n\n%s %s %s %s\n\nby %s", emj[0], emj[1], emj[2], emj[3], title, content, emj[4], emj[5], emj[6], emj[7], j.BotName)
 }
 
+func (j *JokesFeed) FetchFeedUnSync() (items []string, err error) {
+
+	// set 60 second timeout
+	ctx, cancel := context.WithTimeout(context.Background(), j.FetchTimeout)
+	defer cancel()
+
+	// parse the reddit jokes feed
+	fp := gofeed.NewParser()
+	feed, err := fp.ParseURLWithContext(j.Url, ctx)
+
+	if err != nil {
+		log.Errorf("Error fetching feed: %t", err)
+		return nil, err
+	}
+
+	// if time after last updated then run the following
+	// else return both nil
+	var reply []string
+	var content string
+	for _, i := range feed.Items {
+		content = j.ParseContent(i.Content, i.Title)
+		reply = append(reply, content)
+	}
+	log.Infof("Succeeded fetching feed. Items: %d. Updated: %s. New feed count: %d", len(feed.Items), feed.Updated, len(reply))
+	return reply, nil
+}
+
 func (j *JokesFeed) FetchFeed() (items []string, err error) {
 	// set 60 second timeout
 	ctx, cancel := context.WithTimeout(context.Background(), j.FetchTimeout)

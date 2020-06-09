@@ -7,6 +7,8 @@ type Feeder interface {
 
 	FetchFeed() (items []string, err error)
 
+	FetchFeedUnSync() (items []string, err error)
+
 	IsSyncedTime(updatedTime *time.Time) bool
 
 	EmojiInjector(num int) (emojis []string)
