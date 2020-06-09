@@ -9,7 +9,7 @@ import (
 func HandleBot(bot *tbot.Server, jokesMessenger Messenger, jokesFeed feed.Feeder) {
 
 	// handle jokes
-	bot.HandleMessage(".*joke.*", func(m *tbot.Message) {
+	bot.HandleMessage("/jokes", func(m *tbot.Message) {
 		log.Infof("Recieved From: %s At %t ChatID: %s", m.From, m.Date, m.Chat.ID)
 		jokes, err := jokesFeed.FetchFeed()
 		if err != nil {
@@ -45,8 +45,9 @@ func HandleBot(bot *tbot.Server, jokesMessenger Messenger, jokesFeed feed.Feeder
 	bot.HandleMessage("/hi", func(m *tbot.Message) {
 		if err := jokesMessenger.Greet(m.Chat.ID); err != nil {
 			log.Errorf("Handle failed while sending affirmation, error %t", err)
+		} else {
+			log.Infof("Sent greeting")
 		}
-		log.Infof("Sent greeting")
 	})
 
 	// handle apology

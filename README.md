@@ -56,7 +56,7 @@ podman container run --name chutkula -d chutkulabot
 
 ### Bot Usage
 
-By default, the bot sends a daily updated feed on the GroupID configured in the `.env` file. But you can get the updated list on demand also. Simply send `/joke` or `/jokes` to the bot.
+By default, the bot sends a daily updated feed on the GroupID configured in the `.env` file. But you can get the updated list on demand also. Simply send  `/jokes` to the bot. This command will send you the jokes and sync the fetch time with the feed time so that you always keep getting latest jokes. If you wish to opt out of the time sync then you can use the `/lol` command.
 
 <p align="center">
 Made with :heart: by Angad Sharma

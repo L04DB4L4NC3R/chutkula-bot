@@ -3,6 +3,7 @@ package transit
 import (
 	"time"
 
+	log "github.com/sirupsen/logrus"
 	"github.com/yanzay/tbot/v2"
 )
 
@@ -32,12 +33,14 @@ func (j *JokesMessenger) Send(chatID string, message string) error {
 }
 
 func (j *JokesMessenger) Greet(chatID string) error {
+	log.Infof("Message body: %s", j.Greeting)
 	_, err := j.TelegramClient.SendMessage(chatID, j.Greeting)
 
 	return err
 }
 
 func (j *JokesMessenger) Apologize(chatID string) error {
+	log.Infof("Message body: %s", j.Apology)
 	_, err := j.TelegramClient.SendMessage(chatID, j.Apology)
 
 	return err
