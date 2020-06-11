@@ -1,6 +1,7 @@
 package main
 
 import (
+	"net/http"
 	"os"
 	"time"
 
@@ -46,8 +47,12 @@ func main() {
 
 	// start the worker
 	log.Infoln("Starting Bot")
-	if err := bot.Start(); err != nil {
+	go bot.Start()
+
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("Pong"))
+	})
+	if err := http.ListenAndServe(":"+os.Getenv("PORT"), nil); err != nil {
 		dailcron.Stop()
-		log.Fatalf("Error in starting bot: %t", err)
 	}
 }
