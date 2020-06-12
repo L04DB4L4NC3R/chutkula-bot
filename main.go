@@ -54,5 +54,6 @@ func main() {
 	})
 	if err := http.ListenAndServe(":"+os.Getenv("PORT"), nil); err != nil {
 		dailcron.Stop()
+		log.Fatalln(err)
 	}
 }
