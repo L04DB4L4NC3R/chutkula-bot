@@ -59,7 +59,7 @@ func main() {
 	handler.NewJokesHandler(bot, jokesMessenger, jokesFeed, jokesRepo).HandleBot()
 
 	// start CRON Jobs
-	dailcron := cronjob.FeedUpdate(os.Getenv("GROUP_ID"), jokesMessenger, jokesFeed)
+	dailcron := cronjob.FeedUpdate(jokesMessenger, jokesFeed, jokesRepo)
 	dailcron.Start()
 
 	// start the worker

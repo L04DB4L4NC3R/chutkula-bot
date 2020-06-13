@@ -73,3 +73,25 @@ func (m *mongoRepo) UpdateTimeStamp(ctx context.Context, newtime *time.Time, cha
 
 	return err
 }
+
+func (m *mongoRepo) GetUpdatedStates(ctx context.Context) ([]State, error) {
+	cur, err := m.Collection.Find(ctx, bson.D{})
+	if err != nil {
+		return nil, err
+	}
+	defer cur.Close(ctx)
+	var results []State
+	for cur.Next(ctx) {
+		var result State
+		err := cur.Decode(&result)
+		if err != nil {
+			return results, err
+		}
+		results = append(results, result)
+		// do something with result....
+	}
+	if err := cur.Err(); err != nil {
+		return nil, err
+	}
+	return results, nil
+}

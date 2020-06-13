@@ -1,7 +1,0 @@
-build:
-  docker:
-    worker: Containerfile
-release:
-  image: worker
-run:
-  worker: ./app

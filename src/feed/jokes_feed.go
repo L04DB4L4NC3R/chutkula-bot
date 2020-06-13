@@ -120,3 +120,20 @@ func (j *JokesFeed) EmojiInjector(num int) (emojis []string) {
 func (j *JokesFeed) GetFeedName() string {
 	return j.BotName
 }
+
+func (j *JokesFeed) FetchRawFeed() (*gofeed.Feed, error) {
+
+	// set 60 second timeout
+	ctx, cancel := context.WithTimeout(context.Background(), j.FetchTimeout)
+	defer cancel()
+
+	// parse the reddit jokes feed
+	fp := gofeed.NewParser()
+	feed, err := fp.ParseURLWithContext(j.Url, ctx)
+
+	if err != nil {
+		log.Errorf("Error fetching feed: %t", err.Error())
+		return nil, err
+	}
+	return feed, nil
+}

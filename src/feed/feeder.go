@@ -1,6 +1,10 @@
 package feed
 
-import "time"
+import (
+	"time"
+
+	"github.com/mmcdole/gofeed"
+)
 
 type Feeder interface {
 	ParseContent(content string, title string) (parsedItem string)
@@ -14,4 +18,6 @@ type Feeder interface {
 	EmojiInjector(num int) (emojis []string)
 
 	GetFeedName() string
+
+	FetchRawFeed() (*gofeed.Feed, error)
 }
