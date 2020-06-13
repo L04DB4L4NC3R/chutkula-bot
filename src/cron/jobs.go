@@ -13,7 +13,7 @@ import (
 func FeedUpdate(messenger service.Messenger, feed feed.Feeder, repo repo.Repository) *cron.Cron {
 	c := cron.New()
 
-	c.AddFunc("@every 6h0m0s", func() {
+	c.AddFunc("@every 1h0m0s", func() {
 
 		log.Infof("Running CronJob")
 		// get all registered chats
@@ -49,10 +49,11 @@ func FeedUpdate(messenger service.Messenger, feed feed.Feeder, repo repo.Reposit
 
 			if len(jokes) == 0 {
 				log.Infof("All caught up")
-				err := messenger.CaughtUp(chat.ChatID)
+				/* err := messenger.CaughtUp(chat.ChatID)
 				if err != nil {
 					log.Errorf("Handle failed while sending affirmation, error %t", err)
-				}
+				} */
+				continue
 			}
 
 			var (
