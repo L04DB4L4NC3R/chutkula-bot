@@ -1,15 +1,21 @@
 package main
 
 import (
+	"context"
 	"net/http"
 	"os"
 	"time"
 
-	cronjob "github.com/L04DB4L4NC3R/jokes-rss-bot/src/crons"
+	cronjob "github.com/L04DB4L4NC3R/jokes-rss-bot/src/cron"
 	"github.com/L04DB4L4NC3R/jokes-rss-bot/src/feed"
 	"github.com/L04DB4L4NC3R/jokes-rss-bot/src/transit"
+	"github.com/L04DB4L4NC3R/jokes-rss-bot/src/transit/handler"
+	repo "github.com/L04DB4L4NC3R/jokes-rss-bot/src/transit/repositorie"
+	"github.com/L04DB4L4NC3R/jokes-rss-bot/src/transit/service"
 	"github.com/joho/godotenv"
 	log "github.com/sirupsen/logrus"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func initialize() {
@@ -32,7 +38,7 @@ func main() {
 	bot := transit.NewTelegramServer()
 
 	// create transit layer
-	jokesMessenger := transit.NewJokesMessenger(os.Getenv("GREETING"), os.Getenv("APOLOGY"),
+	jokesMessenger := service.NewJokesMessenger(os.Getenv("GREETING"), os.Getenv("APOLOGY"),
 		os.Getenv("BOTNAME"), os.Getenv("GROUP_ID"), bot.Client())
 
 	// create functional layer
@@ -45,11 +51,12 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error connecting to the database: %t", err)
 	}
+	log.Info("Connected to the database")
 
-	jokesRepo := transit.NewMongoRepo(client.Database("chutkula").Collection("feed_state"))
+	jokesRepo := repo.NewMongoRepo(client.Database("chutkulabot").Collection("feed_state"))
 
 	// handle transit
-	transit.HandleBot(ctx, bot, jokesMessenger, jokesFeed, &jokesRepo)
+	handler.NewJokesHandler(bot, jokesMessenger, jokesFeed, jokesRepo).HandleBot()
 
 	// start CRON Jobs
 	dailcron := cronjob.FeedUpdate(os.Getenv("GROUP_ID"), jokesMessenger, jokesFeed)
@@ -64,6 +71,7 @@ func main() {
 	})
 	if err := http.ListenAndServe(":"+os.Getenv("PORT"), nil); err != nil {
 		dailcron.Stop()
+		client.Disconnect(ctx)
 		cancel()
 		log.Fatalln(err)
 	}

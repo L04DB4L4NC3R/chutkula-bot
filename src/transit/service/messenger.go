@@ -1,4 +1,4 @@
-package transit
+package service
 
 type Messenger interface {
 	Send(chatID string, message string) error

@@ -2,12 +2,12 @@ package cronjob
 
 import (
 	"github.com/L04DB4L4NC3R/jokes-rss-bot/src/feed"
-	"github.com/L04DB4L4NC3R/jokes-rss-bot/src/transit"
+	"github.com/L04DB4L4NC3R/jokes-rss-bot/src/transit/service"
 	log "github.com/sirupsen/logrus"
 	"gopkg.in/robfig/cron.v2"
 )
 
-func FeedUpdate(chatID string, messenger transit.Messenger, feed feed.Feeder) *cron.Cron {
+func FeedUpdate(chatID string, messenger service.Messenger, feed feed.Feeder) *cron.Cron {
 	c := cron.New()
 	c.AddFunc("@every 4h0m0s", func() {
 

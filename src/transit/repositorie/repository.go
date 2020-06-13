@@ -1,4 +1,4 @@
-package transit
+package repo
 
 import (
 	"context"

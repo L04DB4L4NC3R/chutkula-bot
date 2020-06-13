@@ -1,4 +1,4 @@
-package transit
+package service
 
 import (
 	"time"

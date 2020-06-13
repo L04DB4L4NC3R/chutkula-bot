@@ -43,7 +43,7 @@ func (j *JokesFeed) ParseContent(content string, title string) (parsedItem strin
 	return fmt.Sprintf("%s %s %s %s\n\n%s\n\n%s\n\n%s %s %s %s\n\nby %s", emj[0], emj[1], emj[2], emj[3], title, content, emj[4], emj[5], emj[6], emj[7], j.BotName)
 }
 
-func (j *JokesFeed) FetchFeedUnSync() (items []string, err error) {
+func (j *JokesFeed) FetchFeedUnSync() (items []string, updatedAt *time.Time, err error) {
 
 	// set 60 second timeout
 	ctx, cancel := context.WithTimeout(context.Background(), j.FetchTimeout)
@@ -54,8 +54,8 @@ func (j *JokesFeed) FetchFeedUnSync() (items []string, err error) {
 	feed, err := fp.ParseURLWithContext(j.Url, ctx)
 
 	if err != nil {
-		log.Errorf("Error fetching feed: %t", err)
-		return nil, err
+		log.Errorf("Error fetching feed: %t", err.Error())
+		return nil, nil, err
 	}
 
 	// if time after last updated then run the following
@@ -67,10 +67,10 @@ func (j *JokesFeed) FetchFeedUnSync() (items []string, err error) {
 		reply = append(reply, content)
 	}
 	log.Infof("Succeeded fetching feed. Items: %d. Updated: %s. New feed count: %d", len(feed.Items), feed.Updated, len(reply))
-	return reply, nil
+	return reply, feed.UpdatedParsed, nil
 }
 
-func (j *JokesFeed) FetchFeed() (items []string, err error) {
+func (j *JokesFeed) FetchFeed(lastUpdatedAt *time.Time) (items []string, newtime *time.Time, err error) {
 	// set 60 second timeout
 	ctx, cancel := context.WithTimeout(context.Background(), j.FetchTimeout)
 	defer cancel()
@@ -80,8 +80,8 @@ func (j *JokesFeed) FetchFeed() (items []string, err error) {
 	feed, err := fp.ParseURLWithContext(j.Url, ctx)
 
 	if err != nil {
-		log.Errorf("Error fetching feed: %t", err)
-		return nil, err
+		log.Errorf("Error fetching feed: %t", err.Error())
+		return nil, nil, err
 	}
 
 	// if time after last updated then run the following
@@ -90,7 +90,7 @@ func (j *JokesFeed) FetchFeed() (items []string, err error) {
 	var content string
 	var uptodatecount = 0
 	for _, i := range feed.Items {
-		if !j.IsSyncedTime(i.UpdatedParsed) {
+		if !j.IsSyncedTime(i.UpdatedParsed, lastUpdatedAt) {
 			uptodatecount++
 			continue
 		}
@@ -98,12 +98,11 @@ func (j *JokesFeed) FetchFeed() (items []string, err error) {
 		reply = append(reply, content)
 	}
 	log.Infof("Succeeded fetching feed. Items: %d. Updated: %s. Up to date count: %d. New feed count: %d", len(feed.Items), feed.Updated, uptodatecount, len(reply))
-	j.LastUpdatedAt = feed.UpdatedParsed
-	return reply, nil
+	return reply, feed.UpdatedParsed, nil
 }
 
-func (j *JokesFeed) IsSyncedTime(updatedTime *time.Time) bool {
-	if j.LastUpdatedAt == nil || updatedTime.After(*j.LastUpdatedAt) {
+func (j *JokesFeed) IsSyncedTime(updatedTime *time.Time, lastUpdatedAt *time.Time) bool {
+	if lastUpdatedAt == nil || updatedTime.After(*lastUpdatedAt) {
 		return true
 	}
 	return false
@@ -116,4 +115,8 @@ func (j *JokesFeed) EmojiInjector(num int) (emojis []string) {
 		emojis = append(emojis, static.EmojiList[index])
 	}
 	return emojis
+}
+
+func (j *JokesFeed) GetFeedName() string {
+	return j.BotName
 }

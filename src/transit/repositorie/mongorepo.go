@@ -1,4 +1,4 @@
-package transit
+package repo
 
 import (
 	"context"
@@ -24,10 +24,10 @@ func (m *mongoRepo) Register(ctx context.Context, chatID string, feed string, up
 	err := m.Collection.FindOne(ctx, bson.M{"chat_id": chatID, "feed": feed}).Decode(&result)
 
 	if err == nil {
-		return errors.Errorf("Document already exists")
+		return errors.Errorf("Document Already Exists")
 	}
 
-	if err == mongo.ErrNilDocument {
+	if err == mongo.ErrNoDocuments {
 		_, err := m.Collection.InsertOne(ctx, bson.M{
 			"chat_id":    chatID,
 			"feed":       feed,
