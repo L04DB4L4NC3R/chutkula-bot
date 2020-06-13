@@ -1,12 +1,14 @@
 package transit
 
 import (
+	"context"
+
 	"github.com/L04DB4L4NC3R/jokes-rss-bot/src/feed"
 	log "github.com/sirupsen/logrus"
 	"github.com/yanzay/tbot/v2"
 )
 
-func HandleBot(bot *tbot.Server, jokesMessenger Messenger, jokesFeed feed.Feeder) {
+func HandleBot(ctx context.Context, bot *tbot.Server, jokesMessenger Messenger, jokesFeed feed.Feeder, jokesRepo *Repository) {
 
 	// handle jokes
 	bot.HandleMessage("/jokes", func(m *tbot.Message) {
@@ -56,6 +58,18 @@ func HandleBot(bot *tbot.Server, jokesMessenger Messenger, jokesFeed feed.Feeder
 			log.Errorf("Handle failed while sending affirmation, error %t", err)
 		}
 		log.Infof("Sent Apology")
+	})
+
+	// Get last updated at
+	bot.HandleMessage("/time", func(m *tbot.Message) {
+		t, err := jokesRepo.GetUpdatedAt(ctx, m.Chat.ID, jokesMessenger.FeedName)
+
+		if err != nil {
+			log.Errorf("Handle failed while sending affirmation, error %t", err)
+		}
+		if err = jokesMessenger.Send(m.Chat.ID, t.String()); err != nil {
+			log.Errorf("Handle failed while sending affirmation, error %t", err)
+		}
 	})
 
 	// get all jokes and don't sync time

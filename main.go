@@ -38,8 +38,18 @@ func main() {
 	// create functional layer
 	jokesFeed := feed.NewJokesFeed(os.Getenv("RSS"), os.Getenv("BOTNAME"), time.Second*60)
 
+	// connect to the Database
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(os.Getenv("MONGODB_URI")))
+
+	if err != nil {
+		log.Fatalf("Error connecting to the database: %t", err)
+	}
+
+	jokesRepo := transit.NewMongoRepo(client.Database("chutkula").Collection("feed_state"))
+
 	// handle transit
-	transit.HandleBot(bot, jokesMessenger, jokesFeed)
+	transit.HandleBot(ctx, bot, jokesMessenger, jokesFeed, &jokesRepo)
 
 	// start CRON Jobs
 	dailcron := cronjob.FeedUpdate(os.Getenv("GROUP_ID"), jokesMessenger, jokesFeed)
@@ -54,6 +64,7 @@ func main() {
 	})
 	if err := http.ListenAndServe(":"+os.Getenv("PORT"), nil); err != nil {
 		dailcron.Stop()
+		cancel()
 		log.Fatalln(err)
 	}
 }

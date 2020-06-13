@@ -8,5 +8,6 @@ require (
 	github.com/mmcdole/gofeed v1.0.0
 	github.com/sirupsen/logrus v1.6.0
 	github.com/yanzay/tbot/v2 v2.2.0
+	go.mongodb.org/mongo-driver v1.3.4
 	gopkg.in/robfig/cron.v2 v2.0.0-20150107220207-be2e0b0deed5
 )
