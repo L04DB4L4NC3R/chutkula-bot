@@ -10,7 +10,7 @@ import (
 	"github.com/L04DB4L4NC3R/jokes-rss-bot/src/feed"
 	"github.com/L04DB4L4NC3R/jokes-rss-bot/src/transit"
 	"github.com/L04DB4L4NC3R/jokes-rss-bot/src/transit/handler"
-	repo "github.com/L04DB4L4NC3R/jokes-rss-bot/src/transit/repositorie"
+	repo "github.com/L04DB4L4NC3R/jokes-rss-bot/src/transit/repository"
 	"github.com/L04DB4L4NC3R/jokes-rss-bot/src/transit/service"
 	"github.com/joho/godotenv"
 	log "github.com/sirupsen/logrus"

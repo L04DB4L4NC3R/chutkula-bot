@@ -2,7 +2,7 @@ package handler
 
 import (
 	"github.com/L04DB4L4NC3R/jokes-rss-bot/src/feed"
-	repo "github.com/L04DB4L4NC3R/jokes-rss-bot/src/transit/repositorie"
+	repo "github.com/L04DB4L4NC3R/jokes-rss-bot/src/transit/repository"
 	"github.com/L04DB4L4NC3R/jokes-rss-bot/src/transit/service"
 	"github.com/yanzay/tbot/v2"
 )

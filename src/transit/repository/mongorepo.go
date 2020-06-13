@@ -38,6 +38,18 @@ func (m *mongoRepo) Register(ctx context.Context, chatID string, feed string, up
 	return err
 }
 
+func (m *mongoRepo) UnRegister(ctx context.Context, chatID string, feed string) error {
+	_, err := m.Collection.DeleteOne(ctx, bson.M{
+		"chat_id": chatID,
+		"feed":    feed,
+	})
+
+	if err == mongo.ErrNoDocuments {
+		return errors.Errorf("Chat Not Found")
+	}
+	return err
+}
+
 func (m *mongoRepo) GetUpdatedAt(ctx context.Context, chatID string, feed string) (*time.Time, error) {
 
 	var result State

@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/L04DB4L4NC3R/jokes-rss-bot/src/feed"
-	repo "github.com/L04DB4L4NC3R/jokes-rss-bot/src/transit/repositorie"
+	repo "github.com/L04DB4L4NC3R/jokes-rss-bot/src/transit/repository"
 	"github.com/L04DB4L4NC3R/jokes-rss-bot/src/transit/service"
 	log "github.com/sirupsen/logrus"
 	"github.com/yanzay/tbot/v2"
@@ -24,7 +24,7 @@ func (h *Handle) HandleBot() {
 	h.bot.HandleMessage("/sorry", h.Apologize)
 	h.bot.HandleMessage("/caughtup", h.CaughtUp)
 	h.bot.HandleMessage("/register", h.Register)
-	h.bot.HandleMessage("/upregister", h.UnRegister) // TODO
+	h.bot.HandleMessage("/unregister", h.UnRegister)
 	h.bot.HandleMessage("/time", h.GetMeta)
 	h.bot.HandleMessage("/jokes", h.MainFunc)
 	h.bot.HandleMessage("/lol", h.Lol)
@@ -79,7 +79,22 @@ func (h *Handle) Register(m *tbot.Message) {
 }
 
 func (h *Handle) UnRegister(m *tbot.Message) {
-	panic("not implemented") // TODO: Implement
+	if err := h.repo.UnRegister(context.Background(), m.Chat.ID, h.feed.GetFeedName()); err != nil {
+		if err.Error() == "No Chat Found" {
+			log.Info("Already unregistered")
+			h.messenger.Send(m.Chat.ID, "Already Un-Registered!")
+			return
+		} else {
+			log.Errorf("Handle failed with error %t", err.Error())
+			h.messenger.Apologize(m.Chat.ID)
+			return
+		}
+	}
+	if err := h.messenger.Send(m.Chat.ID, "Un-Registered!"); err != nil {
+		log.Errorf("Handle failed while sending affirmation, error %t", err)
+	} else {
+		log.Infof("Sent Message")
+	}
 }
 
 func (h *Handle) GetMeta(m *tbot.Message) {

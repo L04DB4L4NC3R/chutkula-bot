@@ -7,6 +7,7 @@ import (
 
 type Repository interface {
 	Register(ctx context.Context, chatID string, feed string, updatedAt *time.Time) error
+	UnRegister(ctx context.Context, chatID string, feed string) error
 	GetUpdatedAt(ctx context.Context, chatID string, feed string) (*time.Time, error)
 	UpdateTimeStamp(ctx context.Context, newtime *time.Time, chatID string, feed string) error
 }
