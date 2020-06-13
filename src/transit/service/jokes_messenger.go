@@ -23,6 +23,7 @@ func NewJokesMessenger(greeting, apology, name, groupID string, tbc *tbot.Client
 		GroupID:        groupID,
 		LastSentAt:     nil,
 		TelegramClient: tbc,
+		Apology:        apology,
 	}
 }
 

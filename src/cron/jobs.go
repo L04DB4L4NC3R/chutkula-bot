@@ -13,9 +13,9 @@ import (
 func FeedUpdate(messenger service.Messenger, feed feed.Feeder, repo repo.Repository) *cron.Cron {
 	c := cron.New()
 
-	c.AddFunc("@every 0h0m10s", func() {
+	c.AddFunc("@every 6h0m0s", func() {
 
-		log.Infof("Running Daily CronJob")
+		log.Infof("Running CronJob")
 		// get all registered chats
 
 		chats, err := repo.GetUpdatedStates(context.Background())
