@@ -11,6 +11,7 @@ A telegram bot to send jokes daily and on demand [@chutkulabot](https://t.me/chu
 - [x] Random emoji injector
 - [x] Scheduled Cron
 - [x] Register and Unregister from updates
+- [x] Photographic memes and written jokes parity
 
 ---
 
