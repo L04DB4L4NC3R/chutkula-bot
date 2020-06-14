@@ -32,16 +32,31 @@ func NewJokesFeed(url, botname string, fetchTimeout time.Duration) Feeder {
 	}
 }
 
-func (j *JokesFeed) ParseContent(content string, title string) (parsedItem string) {
+func (j *JokesFeed) ParseContent(content string, title string, link string) (parsedItem string) {
 
 	// replace useless text from the subreddit
-	replacer := strings.NewReplacer("&quot", "", "&#32", "", ";", "", "[link]", "", "[comments", "", "submitted by", "\n\nsubmitted by: ", "]", "", "&#39", "")
-	// content = replacer.Replace(content)
+	replacer := strings.NewReplacer("&quot", "", "&#32", "", ";", "", "[link]", "", "[comments", "", "submitted by", "\n\nsubmitted by:", "]", "", "&#39", "")
+
+	// check if image exists or not
+	var imageurl string
+	cont := strings.Split(content, " ")
+	n := len(cont)
+
+	for i := 0; i < n-1; i++ {
+		if cont[i] == "<img" {
+			imageurl = cont[i+1][5 : len(cont[i+1])-1]
+		}
+	}
+
+	// if image exists then exit out with the image url
+	if imageurl != "" {
+		return fmt.Sprintf("%s$$%s\n\nView full post at %s\n\nby %s", imageurl, title, link, j.BotName)
+	}
 	content = replacer.Replace(strip.StripTags(content))
 
 	// inject random emoji
 	emj := j.EmojiInjector(8)
-	return fmt.Sprintf("%s %s %s %s\n\n%s\n\n%s\n\n%s %s %s %s\n\nby %s", emj[0], emj[1], emj[2], emj[3], title, content, emj[4], emj[5], emj[6], emj[7], j.BotName)
+	return fmt.Sprintf("%s %s %s %s\n\n%s\n\n%s\n\nView full post at %s\n\n%s %s %s %s\n\nby %s", emj[0], emj[1], emj[2], emj[3], title, content, link, emj[4], emj[5], emj[6], emj[7], j.BotName)
 }
 
 func (j *JokesFeed) FetchFeedUnSync() (items []string, updatedAt *time.Time, err error) {
@@ -64,7 +79,7 @@ func (j *JokesFeed) FetchFeedUnSync() (items []string, updatedAt *time.Time, err
 	var reply []string
 	var content string
 	for _, i := range feed.Items {
-		content = j.ParseContent(i.Content, i.Title)
+		content = j.ParseContent(i.Content, i.Title, i.Link)
 		reply = append(reply, content)
 	}
 	log.Infof("Succeeded fetching feed. Items: %d. Updated: %s. New feed count: %d", len(feed.Items), feed.Updated, len(reply))
@@ -95,7 +110,7 @@ func (j *JokesFeed) FetchFeed(lastUpdatedAt *time.Time) (items []string, newtime
 			uptodatecount++
 			continue
 		}
-		content = j.ParseContent(i.Content, i.Title)
+		content = j.ParseContent(i.Content, i.Title, i.Link)
 		reply = append(reply, content)
 	}
 	log.Infof("Succeeded fetching feed. Items: %d. Updated: %s. Up to date count: %d. New feed count: %d", len(feed.Items), feed.Updated, uptodatecount, len(reply))

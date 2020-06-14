@@ -8,7 +8,7 @@ import (
 )
 
 func NewTelegramServer() *tbot.Server {
-	bot := tbot.New(os.Getenv("BOT_TOKEN"))
+	bot := tbot.New(os.Getenv("TEST_BOT_TOKEN"))
 	log.Infof("Created new bot server")
 	return bot
 }

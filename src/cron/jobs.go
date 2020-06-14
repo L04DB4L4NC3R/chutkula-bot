@@ -41,7 +41,7 @@ func FeedUpdate(messenger service.Messenger, feed feed.Feeder, repo repo.Reposit
 					uptodatecount++
 					continue
 				}
-				content = feed.ParseContent(i.Content, i.Title)
+				content = feed.ParseContent(i.Content, i.Title, i.Link)
 				jokes = append(jokes, content)
 			}
 

@@ -31,7 +31,7 @@ func (h *Handle) HandleBot() {
 }
 func (h *Handle) Greet(m *tbot.Message) {
 	if err := h.messenger.Greet(m.Chat.ID); err != nil {
-		log.Errorf("Handle failed while sending affirmation, error %t", err)
+		log.Errorf("Handle failed while sending affirmation, error %s", err.Error())
 	} else {
 		log.Infof("Sent greeting")
 	}
@@ -39,14 +39,14 @@ func (h *Handle) Greet(m *tbot.Message) {
 
 func (h *Handle) Apologize(m *tbot.Message) {
 	if err := h.messenger.Apologize(m.Chat.ID); err != nil {
-		log.Errorf("Handle failed while sending affirmation, error %t", err)
+		log.Errorf("Handle failed while sending affirmation, error %s", err.Error())
 	}
 	log.Infof("Sent Apology")
 }
 
 func (h *Handle) CaughtUp(m *tbot.Message) {
 	if err := h.messenger.Send(m.Chat.ID, "All Caught Up!"); err != nil {
-		log.Errorf("Handle failed while sending affirmation, error %t", err)
+		log.Errorf("Handle failed while sending affirmation, error %s", err.Error())
 	}
 	log.Infof("Sent Apology")
 }
@@ -54,7 +54,7 @@ func (h *Handle) CaughtUp(m *tbot.Message) {
 func (h *Handle) Register(m *tbot.Message) {
 	_, updatedAt, err := h.feed.FetchFeedUnSync()
 	if err != nil {
-		log.Errorf("Handle failed with error %t", err)
+		log.Errorf("Handle failed with error %s", err.Error())
 		h.messenger.Apologize(m.Chat.ID)
 		return
 	}
@@ -65,13 +65,13 @@ func (h *Handle) Register(m *tbot.Message) {
 			h.messenger.Send(m.Chat.ID, "Already Registered!")
 			return
 		} else {
-			log.Errorf("Handle failed with error %t", err.Error())
+			log.Errorf("Handle failed with error %s", err.Error())
 			h.messenger.Apologize(m.Chat.ID)
 			return
 		}
 	}
 	if err := h.messenger.Send(m.Chat.ID, "Registered!"); err != nil {
-		log.Errorf("Handle failed while sending affirmation, error %t", err)
+		log.Errorf("Handle failed while sending affirmation, error %s", err.Error())
 	} else {
 		log.Infof("Sent Message")
 	}
@@ -85,13 +85,13 @@ func (h *Handle) UnRegister(m *tbot.Message) {
 			h.messenger.Send(m.Chat.ID, "Already Un-Registered!")
 			return
 		} else {
-			log.Errorf("Handle failed with error %t", err.Error())
+			log.Errorf("Handle failed with error %s", err.Error())
 			h.messenger.Apologize(m.Chat.ID)
 			return
 		}
 	}
 	if err := h.messenger.Send(m.Chat.ID, "Un-Registered!"); err != nil {
-		log.Errorf("Handle failed while sending affirmation, error %t", err)
+		log.Errorf("Handle failed while sending affirmation, error %s", err.Error())
 	} else {
 		log.Infof("Sent Message")
 	}
@@ -102,10 +102,10 @@ func (h *Handle) GetMeta(m *tbot.Message) {
 	t, err := h.repo.GetUpdatedAt(ctx, m.Chat.ID, h.feed.GetFeedName())
 
 	if err != nil {
-		log.Errorf("Handle failed while sending affirmation, error %t", err)
+		log.Errorf("Handle failed while sending affirmation, error %s", err.Error())
 	}
 	if err = h.messenger.Send(m.Chat.ID, t.String()); err != nil {
-		log.Errorf("Handle failed while sending affirmation, error %t", err)
+		log.Errorf("Handle failed while sending affirmation, error %s", err.Error())
 	}
 }
 func (h *Handle) MainFunc(m *tbot.Message) {
@@ -113,13 +113,13 @@ func (h *Handle) MainFunc(m *tbot.Message) {
 	// get last updated timestamp
 	ts, err := h.repo.GetUpdatedAt(context.Background(), m.Chat.ID, h.feed.GetFeedName())
 	if err != nil {
-		log.Errorf("Handle failed with error %t", err)
+		log.Errorf("Handle failed with error %s", err.Error())
 		h.messenger.Apologize(m.Chat.ID)
 		return
 	}
 	jokes, newtime, err := h.feed.FetchFeed(ts)
 	if err != nil {
-		log.Errorf("Handle failed with error %t", err)
+		log.Errorf("Handle failed with error %s", err.Error())
 		h.messenger.Apologize(m.Chat.ID)
 		return
 	}
@@ -127,7 +127,7 @@ func (h *Handle) MainFunc(m *tbot.Message) {
 		log.Infof("All caught up")
 		err := h.messenger.CaughtUp(m.Chat.ID)
 		if err != nil {
-			log.Errorf("Handle failed while sending affirmation, error %t", err)
+			log.Errorf("Handle failed while sending affirmation, error %s", err.Error())
 		}
 	}
 
@@ -138,7 +138,7 @@ func (h *Handle) MainFunc(m *tbot.Message) {
 	for _, joke := range jokes {
 		err := h.messenger.Send(m.Chat.ID, joke)
 		if err != nil {
-			log.Errorf("Handle failed while sending feed: %t, error %t", joke, err)
+			log.Errorf("Handle failed while sending feed: %t, error %s", joke, err.Error())
 			errcount++
 		} else {
 			successcount++
@@ -148,7 +148,7 @@ func (h *Handle) MainFunc(m *tbot.Message) {
 
 	// update the new time
 	if err = h.repo.UpdateTimeStamp(context.Background(), newtime, m.Chat.ID, h.feed.GetFeedName()); err != nil {
-		log.Errorf("Update timestamp Handle failed with error %t", err)
+		log.Errorf("Update timestamp Handle failed with error %s", err.Error())
 		h.messenger.Send(m.Chat.ID, "Timestamp Could Not be Updated")
 		return
 	}
@@ -158,7 +158,7 @@ func (h *Handle) Lol(m *tbot.Message) {
 	log.Infof("Recieved From: %s At %t ChatID: %s", m.From, m.Date, m.Chat.ID)
 	jokes, _, err := h.feed.FetchFeedUnSync()
 	if err != nil {
-		log.Errorf("Handle failed with error %t", err)
+		log.Errorf("Handle failed with error %s", err.Error())
 		h.messenger.Apologize(m.Chat.ID)
 		return
 	}
@@ -166,7 +166,7 @@ func (h *Handle) Lol(m *tbot.Message) {
 		log.Infof("All caught up")
 		err := h.messenger.CaughtUp(m.Chat.ID)
 		if err != nil {
-			log.Errorf("Handle failed while sending affirmation, error %t", err)
+			log.Errorf("Handle failed while sending affirmation, error %s", err.Error())
 		}
 	}
 
@@ -177,7 +177,7 @@ func (h *Handle) Lol(m *tbot.Message) {
 	for _, joke := range jokes {
 		err := h.messenger.Send(m.Chat.ID, joke)
 		if err != nil {
-			log.Errorf("Handle failed while sending feed: %t, error %t", joke, err)
+			log.Errorf("Handle failed while sending feed: %t, error %s", joke, err.Error())
 			errcount++
 		} else {
 			successcount++

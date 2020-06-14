@@ -1,6 +1,7 @@
 package service
 
 import (
+	"strings"
 	"time"
 
 	log "github.com/sirupsen/logrus"
@@ -28,6 +29,18 @@ func NewJokesMessenger(greeting, apology, name, groupID string, tbc *tbot.Client
 }
 
 func (j *JokesMessenger) Send(chatID string, message string) error {
+
+	// photoreplies are formatted like this:
+	// <img url>$$<title>
+	// check if the message is a photo or not
+	if message[0:5] == "https" {
+		messageMeta := strings.Split(message, "$$")
+		log.Infof("Found Image: %s with title: %s", messageMeta[0], messageMeta[1])
+		_, err := j.TelegramClient.SendPhoto(chatID, messageMeta[0], tbot.OptCaption(messageMeta[1]))
+		return err
+	}
+
+	// if message is not a photo then send it the regular way
 	_, err := j.TelegramClient.SendMessage(chatID, message)
 
 	return err

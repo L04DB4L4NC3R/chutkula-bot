@@ -7,7 +7,7 @@ import (
 )
 
 type Feeder interface {
-	ParseContent(content string, title string) (parsedItem string)
+	ParseContent(content string, title string, link string) (parsedItem string)
 
 	FetchFeed(lastUpdatedAt *time.Time) (items []string, newtime *time.Time, err error)
 
