@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/L04DB4L4NC3R/jokes-rss-bot/src/static"
+	strip "github.com/grokify/html-strip-tags-go"
 	log "github.com/sirupsen/logrus"
 
 	"github.com/mmcdole/gofeed"
@@ -35,8 +36,8 @@ func (j *JokesFeed) ParseContent(content string, title string) (parsedItem strin
 
 	// replace useless text from the subreddit
 	replacer := strings.NewReplacer("&quot", "", "&#32", "", ";", "", "[link]", "", "[comments", "", "submitted by", "\n\nsubmitted by: ", "]", "", "&#39", "")
-	content = replacer.Replace(content)
-	// content = replacer.Replace(strip.StripTags(content))
+	// content = replacer.Replace(content)
+	content = replacer.Replace(strip.StripTags(content))
 
 	// inject random emoji
 	emj := j.EmojiInjector(8)
