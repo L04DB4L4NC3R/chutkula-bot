@@ -9,7 +9,7 @@ A telegram bot to send jokes daily and on demand [@chutkulabot](https://t.me/chu
 - [x] Ability to fetch from the RSS feed of multiple subreddits
 - [x] Time sync, so you always get the most latest feed
 - [x] Random emoji injector
-- [x] 6 hourly CRON
+- [x] Scheduled Cron
 - [x] Register and Unregister from updates
 
 ---
