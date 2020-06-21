@@ -24,9 +24,8 @@ func initialize() {
 	log.SetOutput(os.Stdout)
 
 	if err := godotenv.Load(); err != nil {
-		log.Warnf("Error loading .env file: %t", err)
+		log.Warnf("Error loading .env file: %s", err.Error())
 	}
-
 }
 
 func main() {
@@ -49,7 +48,7 @@ func main() {
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(os.Getenv("MONGODB_URI")))
 
 	if err != nil {
-		log.Fatalf("Error connecting to the database: %t", err)
+		log.Fatalf("Error connecting to the database: %s", err.Error())
 	}
 	log.Info("Connected to the database")
 

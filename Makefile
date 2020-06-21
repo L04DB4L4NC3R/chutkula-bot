@@ -1,4 +1,6 @@
 .PHONY: build-android
+
+# Note that in the .env, remove the +srv for it to run on aarch64 linux
 build-android:
 	# Add the path of your NDK_TOOLCHAIN here
 	CC=~/build-deps/ndk-toolchain/bin/aarch64-linux-android30-clang \
