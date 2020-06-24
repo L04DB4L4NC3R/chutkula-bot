@@ -56,7 +56,7 @@ func (j *JokesFeed) ParseContent(content string, title string, link string) (par
 
 	// inject random emoji
 	emj := j.EmojiInjector(8)
-	return fmt.Sprintf("%s %s %s %s\n\n%s\n\n%s\n\nView full post at %s\n\n%s %s %s %s\n\nby %s", emj[0], emj[1], emj[2], emj[3], title, content, link, emj[4], emj[5], emj[6], emj[7], j.BotName)
+	return fmt.Sprintf("%s %s %s %s\n\n%s\n\n%s\n\nView full post at %s\n\n%s %s %s %s\n\nby %s", emj[0], emj[1], emj[2], emj[3], title, content, link, emj[4], emj[5], emj[6], emj[7], "http://kutt.loadbalancer.tech/chutkulabot")
 }
 
 func (j *JokesFeed) FetchFeedUnSync() (items []string, updatedAt *time.Time, err error) {
