@@ -1,5 +1,5 @@
 ## Chutkula Bot
-A telegram bot to send jokes daily and on demand [@chutkulabot](https://t.me/chutkulabot)
+A telegram bot to send jokes daily and on demand [@chutkulabot](http://kutt.loadbalancer.tech/chutkulabot)
 
 ---
 
