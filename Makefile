@@ -11,6 +11,16 @@ build-android:
 	CGO_ENABLED=1 \
 	go build -v -o ./bin/chutkulabot-android -x .
 
+# needs the package aarch64-linux-gnu-gcc installed
+.PHONY: build-raspberrypi:
+build-raspberrypi:
+	CC=/usr/bin/aarch64-linux-gnu-gcc GO111MODULES=on \
+	GOOS=linux \
+	GOARCH=arm64 \
+	GOARM=7 \
+	CGO_ENABLED=1 \
+	go build -v -o ./bin/chutkulabot-pi -x .
+
 .PHONY: podman-build
 podman-build:
 	podman image build -t chutkulabot .
