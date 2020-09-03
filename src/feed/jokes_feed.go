@@ -50,7 +50,9 @@ func (j *JokesFeed) ParseContent(content string, title string, link string) (par
 
 	// if image exists then exit out with the image url
 	if imageurl != "" {
-		return fmt.Sprintf("%s$$%s\n\nView full post at %s\n\nby %s", imageurl, title, link, j.BotName)
+		// this ensures no image is there, comment for image memes
+		return ""
+		// return fmt.Sprintf("%s$$%s\n\nView full post at %s\n\nby %s", imageurl, title, link, j.BotName)
 	}
 	content = replacer.Replace(strip.StripTags(content))
 
@@ -80,7 +82,9 @@ func (j *JokesFeed) FetchFeedUnSync() (items []string, updatedAt *time.Time, err
 	var content string
 	for _, i := range feed.Items {
 		content = j.ParseContent(i.Content, i.Title, i.Link)
-		reply = append(reply, content)
+		if reply != "" {
+			reply = append(reply, content)
+		}
 	}
 	log.Infof("Succeeded fetching feed. Items: %d. Updated: %s. New feed count: %d", len(feed.Items), feed.Updated, len(reply))
 	return reply, feed.UpdatedParsed, nil
