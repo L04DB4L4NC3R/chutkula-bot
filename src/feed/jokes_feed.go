@@ -82,7 +82,7 @@ func (j *JokesFeed) FetchFeedUnSync() (items []string, updatedAt *time.Time, err
 	var content string
 	for _, i := range feed.Items {
 		content = j.ParseContent(i.Content, i.Title, i.Link)
-		if reply != "" {
+		if content != "" {
 			reply = append(reply, content)
 		}
 	}
