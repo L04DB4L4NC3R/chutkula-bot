@@ -115,7 +115,9 @@ func (j *JokesFeed) FetchFeed(lastUpdatedAt *time.Time) (items []string, newtime
 			continue
 		}
 		content = j.ParseContent(i.Content, i.Title, i.Link)
-		reply = append(reply, content)
+		if content != "" {
+			reply = append(reply, content)
+		}
 	}
 	log.Infof("Succeeded fetching feed. Items: %d. Updated: %s. Up to date count: %d. New feed count: %d", len(feed.Items), feed.Updated, uptodatecount, len(reply))
 	return reply, feed.UpdatedParsed, nil
