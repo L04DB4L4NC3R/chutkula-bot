@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"strings"
 	"time"
 
@@ -33,6 +34,10 @@ func (j *JokesMessenger) Send(chatID string, message string) error {
 	// photoreplies are formatted like this:
 	// <img url>$$<title>
 	// check if the message is a photo or not
+
+	if message == "" {
+		return errors.New("Empty Message")
+	}
 	if message[0:5] == "https" {
 		messageMeta := strings.Split(message, "$$")
 		log.Infof("Found Image: %s with title: %s", messageMeta[0], messageMeta[1])
