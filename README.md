@@ -28,6 +28,8 @@ A telegram bot to send jokes daily and on demand [NSFW]
 
 * Set up `.env` using the [.env.example](./.env.example) provided in this repo.
 
+* Which subreddits to serve depend on the env
+
 * Run natively:
 
 ```sh
