@@ -19,10 +19,10 @@ jobs:
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
       - name: Build and push
         id: docker_build
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v2.1.0
         with:
           push: true
-          tags: latest
+          tags: ${{ github.sha }}
           file: ./Containerfile
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
