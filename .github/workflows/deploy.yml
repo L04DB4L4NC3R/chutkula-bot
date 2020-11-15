@@ -6,7 +6,7 @@ on:
 
 jobs:
   main:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -24,10 +24,5 @@ jobs:
           push: true
           tags: ${{ github.sha }}
           file: ./Containerfile
-            #build-args: |
-            #arg1=value1
-            #arg2=value2
-          secrets: |
-            MAINTAINER_NAME=Angad
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
