@@ -22,7 +22,7 @@ jobs:
         uses: docker/build-push-action@v2.1.0
         with:
           push: true
-          tags: angadsharma1016/chutkulabot:latest
+          tags: angadsharma1016/chutkulabot:${{ github.sha }}
           file: ./Containerfile
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
