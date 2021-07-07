@@ -41,7 +41,7 @@ func main() {
 		os.Getenv("BOTNAME"), os.Getenv("GROUP_ID"), bot.Client())
 
 	// create functional layer
-	jokesFeed := feed.NewJokesFeed(os.Getenv("RSS"), os.Getenv("BOTNAME"), time.Second*60)
+	jokesFeed := feed.NewJokesFeed(os.Getenv("RSS"), os.Getenv("BOTNAME"), time.Second*120)
 
 	// connect to the Database
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
